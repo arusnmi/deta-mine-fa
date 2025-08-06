@@ -10,26 +10,29 @@ Cab.to_csv('cab_rides_cleaned.csv', index=False)
 
 weather=pd.read_csv('weather.csv')
 
-
-le = LabelEncoder()
-weather['location_encoded'] = le.fit_transform(weather['location'])
-
-
-features = ['time_stamp', 'humidity', 'wind', 'temp', 'location_encoded', 'clouds', 'pressure'
-]
-
-X = weather[features]
-y = weather['rain']
-
-imputer = SimpleImputer(strategy='mean')
-X_imputed = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
+different_districts = weather['location'].unique()
+for district_name in different_districts:
+    district_data = weather[weather['location'] == district_name]
+    disval= district_data['rain']
+    med_val= disval.median()
+    print (med_val)
+    weather.loc[weather['location'] == district_name, 'rain'] = district_data['rain'].fillna(med_val)
+    weather.to_csv('weather_updated.csv', index=False)
 
 
-rain_not_null = weather['rain'].notna()
-model = LinearRegression()
-model.fit(X_imputed[rain_not_null], y[rain_not_null])
 
-rain_is_null = weather['rain'].isna()
-weather.loc[rain_is_null, 'rain'] = model.predict(X_imputed[rain_is_null])
 
-weather.to_csv('weather_cleaned.csv', index=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
