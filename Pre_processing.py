@@ -5,6 +5,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 
 Cab=pd.read_csv('cab_rides.csv')
+non= Cab.isna().sum()
+print(non)
 Cab.dropna(inplace=True)
 Cab.to_csv('cab_rides_cleaned.csv', index=False)
 

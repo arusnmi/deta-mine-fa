@@ -3,11 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-
-
-cab= pd.read_csv('cab_rides_cleaned.csv')
-weather= pd.read_csv('weather_updated.csv')
-
 def detect_outliers(data, column):
     Q1 = data[column].quantile(0.25)
     Q3 = data[column].quantile(0.75)
@@ -16,6 +11,59 @@ def detect_outliers(data, column):
     upper_bound = Q3 + 1.5 * IQR
     return data[(data[column] < lower_bound) | (data[column] > upper_bound)]
 
+cab= pd.read_csv('cab_rides_cleaned.csv')
+
+start= cab['source'].unique()
+end= cab['destination'].unique()
+cab_companies = cab['cab_type'].unique()
+# for source in start:
+#     for destination in end:
+
+#         if source == destination:
+#             continue
+            
+#         product_ids = cab_data['product_id'].unique()
+#         cab_data = cab[(cab['source'] == source) & (cab['destination'] == destination)]
+
+#         if len(cab_data) == 0:
+#             continue
+            
+#         outliers = detect_outliers(cab_data, 'distance')
+        
+#         plt.figure(figsize=(12, 6))
+#         plt.boxplot(cab_data['distance'], vert=False)
+#         plt.title(f'Distance Outliers from {source} to {destination}')
+#         plt.xlabel('Distance')
+#         plt.show()
+#     product_ids = cab_data['product_id'].unique()
+#     for product in product_ids:
+#         product_data = cab_data[cab_data['product_id'] == product]
+
+# Price+cab type+product ID
+
+for company in cab_companies:
+    cab_data = cab[cab['cab_type'] == company]
+    
+    # Group by product ID
+    product_ids = cab_data['product_id'].unique()
+    
+    for product in product_ids:
+        product_data = cab_data[cab_data['product_id'] == product]
+        outliers = detect_outliers(product_data, 'price')
+        
+        plt.figure(figsize=(12, 6))
+        plt.boxplot(product_data['price'], vert=False)
+        plt.title(f'Price Outliers for {company} - Product ID: {product}')
+        plt.xlabel('Price')
+        plt.show()
+        
+        print(f"\nSummary for {company} - Product ID: {product}")
+        print(f"Total rides: {len(product_data)}")
+        print(f"Number of outliers: {len(outliers)}")
+        print(f"Average price: ${product_data['price'].mean():.2f}")
+        print("-" * 50)
+
+weather= pd.read_csv('weather_updated.csv')
 different_districts = weather['location'].unique()
 
 #tempture 
