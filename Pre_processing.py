@@ -25,25 +25,12 @@ Cab.to_csv('cab_rides_cleaned.csv', index=False)
 # Read the weather dataset from CSV file
 weather=pd.read_csv('weather.csv')
 
-# Get list of unique districts from the location column
-different_districts = weather['location'].unique()
+# fillall not vals
+weather.fillna(0, inplace=True)
 
-# Process rainfall data for each district separately
-for district_name in different_districts:
-    # Filter weather data for the current district
-    district_data = weather[weather['location'] == district_name]
-    
-    # Extract rainfall data for the current district
-    disval= district_data['rain']
-    
-    # Calculate the median rainfall for the district
-    # This will be used to fill missing values
-    med_val= disval.median()
-    print (med_val)
-    
-    # Fill missing rainfall values with the district's median rainfall
-    # This ensures missing values are replaced with reasonable estimates
-    weather.loc[weather['location'] == district_name, 'rain'] = district_data['rain'].fillna(med_val)
+
+
+
     
 # Save the updated weather data with filled missing values to a new CSV file
 # index=False prevents writing row numbers as a separate column
