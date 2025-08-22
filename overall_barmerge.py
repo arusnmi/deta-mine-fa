@@ -3,6 +3,11 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
+
+# Create Box_plot_images directory if it doesn't exist
+if not os.path.exists('Box_plot_images'):
+    os.makedirs('Box_plot_images')
 
 # Load the dataset and create route labels
 base_df = pd.read_csv("matched_records_filteredLoc.csv")
@@ -26,8 +31,8 @@ median_price_Lyft_dry = base_df[(base_df['cab_type']=='Lyft') & (base_df['rain']
 # Calculate average and median prices for Uber under different conditions
 # North Station to Boston University route during rain
 average_price_Uber_northStnroute = base_df[(base_df['cab_type']== 'Uber') & 
-                                          (base_df['rain']!=0) & 
-                                          (base_df['route']=='North Station → Boston University')]['price'].mean()
+                                        (base_df['rain']!=0) & 
+                                        (base_df['route']=='North Station → Boston University')]['price'].mean()
 # Overall rainy day average
 average_price_Uber_rain = base_df[(base_df['cab_type']=='Uber') & (base_df['rain']!=0)]['price'].mean()
 # Overall dry day average
@@ -79,4 +84,6 @@ plt.legend(title="Cab Type")
 plt.xticks(rotation=90, fontsize=6)  # Rotate and resize x-axis labels
 plt.yticks(fontsize=6)  # Resize y-axis labels
 plt.tight_layout()  # Adjust layout to prevent label overlap
-plt.show()
+# Save the figure instead of showing it
+plt.savefig('Box_plot_images/overall_price_comparison.png', dpi=300, bbox_inches='tight')
+plt.close()

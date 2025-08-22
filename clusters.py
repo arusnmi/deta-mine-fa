@@ -9,9 +9,6 @@ from datetime import datetime
 # Read the CSV file
 df = pd.read_csv('cab_rides_cleaned.csv')  
 
-# Convert timestamp to numeric value (seconds since epoch)
-df['time_stamp'] = pd.to_datetime(df['time_stamp'])
-df['time_numeric'] = df['time_stamp'].astype(np.int64) // 10**9
 
 # Select features for clustering
 features = ['price', 'distance', 'time_numeric' ]

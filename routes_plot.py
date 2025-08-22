@@ -27,7 +27,7 @@ for route in routes:
         x='cab_type',
         y='price',
         hue='cab_type',
-        palette={"Uber": "black", "Lyft": "yellow"},  # Color scheme for dry days
+        palette={"Uber": "black", "Lyft": "yellow"},
         alpha=1,
         errorbar=None,
         ax=axes[0]
@@ -42,20 +42,28 @@ for route in routes:
         x='cab_type',
         y='price',
         hue='cab_type',
-        palette={"Uber": "blue", "Lyft": "red"},  # Different color scheme for rainy days
+        palette={"Uber": "blue", "Lyft": "red"},
         alpha=0.5,
         errorbar=None,
         ax=axes[1]
     )
     axes[1].set_title('Rainy Days')
     axes[1].set_xlabel('Cab Type')
-    axes[1].set_ylabel('')  # Remove ylabel since it's shared with left subplot
+    axes[1].set_ylabel('')
 
     # Add main title for the entire figure
     fig.suptitle(f'Price Comparison Rain vs Dry for Route: {route}', fontsize=14)
 
-    # Adjust layout to prevent overlap and display the plot
+    # Adjust layout to prevent overlap
     plt.tight_layout(rect=[0, 0, 1, 0.95])
-    plt.show()
+    
+    # Create a valid filename by replacing invalid characters
+    safe_route = route.replace('→', 'to').replace(' ', '_')
+    
+    # Save the plot as a PNG file
+    plt.savefig(f'route_comparison_{safe_route}.png', dpi=300, bbox_inches='tight')
+    
+    # Close the figure to free up memory
+    plt.close(fig)
 
 

@@ -3,6 +3,11 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
+
+# Create Box_plot_images directory if it doesn't exist
+if not os.path.exists('Box_plot_images'):
+    os.makedirs('Box_plot_images')
 
 # Load and prepare the dataset
 base_df = pd.read_csv("matched_records_filteredLoc.csv")
@@ -32,7 +37,9 @@ plt.legend(title="Cab Type")
 plt.xticks(rotation=90, fontsize=6)  # Rotate and resize x-axis labels
 plt.yticks(fontsize=6)  # Resize y-axis labels
 plt.tight_layout()  # Adjust layout to prevent label overlap
-plt.show()
+# Replace plt.show() with savefig for dry days plot
+plt.savefig('Box_plot_images/dry_days_comparison.png', dpi=300, bbox_inches='tight')
+plt.close()
 
 # Define color scheme for rainy day visualization
 # Blue for Uber, Red for Lyft
@@ -55,4 +62,6 @@ plt.legend(title="Cab Type")
 plt.xticks(rotation=90, fontsize=6)  # Rotate and resize x-axis labels
 plt.yticks(fontsize=6)  # Resize y-axis labels
 plt.tight_layout()  # Adjust layout to prevent label overlap
-plt.show()
+# Replace plt.show() with savefig for rainy days plot
+plt.savefig('Box_plot_images/rainy_days_comparison.png', dpi=300, bbox_inches='tight')
+plt.close()
