@@ -5,45 +5,57 @@ import seaborn as sns
 
 df = pd.read_csv("matched_records_filteredLoc.csv")
 
-# Get all Uber and Lyft combos
+# Analyze distribution of service tiers for each cab company (Uber and Lyft)
 for cabtype in ['Uber', 'Lyft']:
+    # Filter data for current cab company
     cab_df = df[df['cab_type'] == cabtype].copy()
+    # Create route labels by combining source and destination
     cab_df['route'] = cab_df['source'] + " → " + cab_df['destination']
 
-    # Count number of rides per route and per name (tier)
+    # Calculate ride frequency for each service tier on each route
     tier_counts = cab_df.groupby(['route', 'name']).size().unstack(fill_value=0)
 
-    # Find percent of each tier for each route
-    tier_props = tier_counts.div(tier_counts.sum(axis=1), axis=0) * 100  # percentage
+    # Convert counts to percentages for better comparison
+    tier_props = tier_counts.div(tier_counts.sum(axis=1), axis=0) * 100
 
-    # Create the bar plot (each bar is a route, and each segment is a tier as percent)
+    # Create stacked bar chart showing tier distribution
     ax = tier_props.plot(kind='bar', stacked=True, colormap='tab20')
     plt.title(f'Percentage Distribution of Tiers across Routes -- {cabtype}')
     plt.xlabel('Route')
     plt.ylabel('Percent of Rides')
+    
+    # Adjust text elements for better readability
     plt.xticks(rotation=90, fontsize=7)
     plt.yticks(fontsize=7)
     plt.tight_layout()
 
-    # Add percentage values on the top of each tier (on top of each bar segment)
+    # Add percentage labels on each segment of the stacked bars
     for i, route in enumerate(tier_props.index):
-        y_offset = 0
+        y_offset = 0  # Track vertical position for label placement
         for tier in tier_props.columns:
             value = tier_props.loc[route, tier]
-            if value > 0:
+            if value > 0:  # Only add label if segment exists
                 ax.text(
-                    i, y_offset + value / 2,        # position: x (bar), y (middle of segment)
-                    f"{value:.1f}%",                # formatted percent
-                    ha='center', va='center', fontsize=6, fontweight='bold', color='black', rotation=90
+                    i,                              # x-position (bar index)
+                    y_offset + value / 2,           # y-position (middle of segment)
+                    f"{value:.1f}%",               # Format as percentage with 1 decimal
+                    ha='center',                    # Center text horizontally
+                    va='center',                    # Center text vertically
+                    fontsize=6,                     # Small font size for clarity
+                    fontweight='bold',              # Make text bold
+                    color='black',                  # Black text for contrast
+                    rotation=90                     # Rotate for better fit
                 )
-                y_offset += value
+                y_offset += value  # Update position for next label
 
+    # Configure and position the legend
     plt.legend(
-    title='Tier',
-    loc='upper center',
-    bbox_to_anchor=(0.5, -0.9),  # 0.5 centers, negative y puts below x-axis
-    fontsize=7,
-    ncol=len(tier_props.columns)   # spread legend into as many columns as there are tiers
-)
+        title='Tier',
+        loc='upper center',
+        bbox_to_anchor=(0.5, -0.9),  # Position below the plot
+        fontsize=7,
+        ncol=len(tier_props.columns)  # Spread tiers horizontally
+    )
 
+    # Display the completed visualization
     plt.show()
