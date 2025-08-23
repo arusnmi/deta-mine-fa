@@ -2,8 +2,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 df = pd.read_csv("matched_records_filteredLoc.csv")
+
+# Create directory if it doesn't exist
+output_dir = "overall_bargraph_merge"
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 # Analyze distribution of service tiers for each cab company (Uber and Lyft)
 for cabtype in ['Uber', 'Lyft']:
@@ -57,5 +63,6 @@ for cabtype in ['Uber', 'Lyft']:
         ncol=len(tier_props.columns)  # Spread tiers horizontally
     )
 
-    # Display the completed visualization
-    plt.show()
+    # Save the figure
+    plt.savefig(os.path.join(output_dir, f"{cabtype}_tier_distribution.png"))
+    plt.close()

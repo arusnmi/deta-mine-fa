@@ -18,8 +18,8 @@ rainydays_df = base_df[base_df['rain']!=0]
 # Calculate average and median prices for Lyft under different conditions
 # North Station to Boston University route during rain
 average_price_Lyft_northStnroute = base_df[(base_df['cab_type']== 'Lyft') & 
-                                          (base_df['rain']!=0) & 
-                                          (base_df['route']=='North Station → Boston University')]['price'].mean()
+                                        (base_df['rain']!=0) & 
+                                        (base_df['route']=='North Station → Boston University')]['price'].mean()
 # Overall rainy day average
 average_price_Lyft_rain = base_df[(base_df['cab_type']=='Lyft') & (base_df['rain']!=0)]['price'].mean()
 # Overall dry day average
