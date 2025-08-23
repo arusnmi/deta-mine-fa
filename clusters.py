@@ -70,3 +70,4 @@ for cluster in range(optimal_k):  # Changed n_clusters to optimal_k
     print(f"Number of points: {len(cluster_data)}")
     print(f"Average price: ${cluster_data['price'].mean():.2f}")
     print(f"Average distance: {cluster_data['distance'].mean():.2f}")
+    print(f"Average time (decimal hours): {cluster_data['time_decimal'].mean():.2f}")
