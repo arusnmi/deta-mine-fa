@@ -12,7 +12,7 @@ df = pd.read_csv('matched_records_filtered_with_time.csv')
 
 df = df.fillna(0)  # Handle missing values by filling with 0
 # Select features for clustering
-features = ['price', 'surge_multiplier', 'distance', 'time_decimal']  # Added distance
+features = ['surge_multiplier', 'time_decimal'] 
 X = df[features].copy()
 
 # Scale the features
@@ -46,18 +46,16 @@ df['Cluster'] = kmeans.fit_predict(X_scaled)
 
 # Create 3D visualization
 fig = plt.figure(figsize=(12, 8))
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.add_subplot(111)
+
 
 # Plot points
-scatter = ax.scatter(df['price'], 
-                    df['distance'], 
-                    df['time_decimal'],
-                    c=df['Cluster'], 
-                    cmap='viridis')
+scatter = ax.scatter(df['surge_multiplier'], 
 
-ax.set_xlabel('Price')
-ax.set_ylabel('Distance')
-ax.set_zlabel('Time (Decimal Hours)')
+                    df['time_decimal'])
+
+ax.set_xlabel('surge_multiplier')
+ax.set_ylabel('time_decimal')
 plt.colorbar(scatter)
 plt.title('K-means Clustering Results')
 plt.show()
@@ -68,6 +66,4 @@ for cluster in range(optimal_k):  # Changed n_clusters to optimal_k
     cluster_data = df[df['Cluster'] == cluster]
     print(f"\nCluster {cluster}:")
     print(f"Number of points: {len(cluster_data)}")
-    print(f"Average price: ${cluster_data['price'].mean():.2f}")
-    print(f"Average distance: {cluster_data['distance'].mean():.2f}")
     print(f"Average time (decimal hours): {cluster_data['time_decimal'].mean():.2f}")
