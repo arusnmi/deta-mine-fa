@@ -52,7 +52,9 @@ ax = fig.add_subplot(111)
 # Plot points
 scatter = ax.scatter(df['surge_multiplier'], 
 
-                    df['time_decimal'])
+                    df['time_decimal'],
+                    c=df['Cluster'], 
+                    cmap='viridis')
 
 ax.set_xlabel('surge_multiplier')
 ax.set_ylabel('time_decimal')
